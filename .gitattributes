@@ -1,0 +1,10 @@
+# Store text files with LF line endings, whatever OS you're on, so diffs don't
+# show "every line changed" when a Windows and a macOS teammate edit a file.
+* text=auto eol=lf
+
+# Windows scripts keep Windows line endings.
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+
+# Shell scripts must stay LF or they won't run on macOS/Linux.
+*.sh text eol=lf

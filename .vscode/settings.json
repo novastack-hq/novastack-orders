@@ -1,0 +1,39 @@
+{
+  // Team workspace settings: these override each developer's user settings
+  // for this repository only. Personal preferences (theme, font, keybindings)
+  // belong in your user settings, not here. Never commit an interpreter path:
+  // it differs between Windows and macOS/Linux. VS Code finds .venv itself.
+
+  // ---- Python formatting and linting: Ruff, on every save
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "editor.rulers": [88],
+
+  // ---- Testing: pytest, discovered from tests/
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": ["tests"],
+
+  // ---- Type checking and IntelliSense (Pylance)
+  "python.analysis.typeCheckingMode": "standard",
+
+  // ---- Files: same line endings and whitespace for everyone
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.ruff_cache": true,
+    "**/.mypy_cache": true
+  },
+
+  // ---- Git
+  "git.autofetch": true
+}

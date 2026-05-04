@@ -1,0 +1,28 @@
+# Environments
+.venv/
+.env
+
+# Python caches and build output
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Local data the CLI or tests may create
+*.db
+outbox/
+
+# Set-up report (may contain your username; share it only with staff)
+setup-report.txt
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db

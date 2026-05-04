@@ -1,0 +1,8 @@
+# Used by the test suite: the kitchen never closes, and logging is quieter.
+
+[store]
+opening = "00:00"
+closing = "23:59:59"
+
+[logging]
+level = "ERROR"

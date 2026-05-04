@@ -1,0 +1,19 @@
+{
+  // VS Code offers to install these when you open the folder.
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.debugpy",
+    "charliermarsh.ruff",
+    "EditorConfig.EditorConfig",
+    "eamodio.gitlens",
+    "GitHub.copilot-chat",
+    "ms-vscode-remote.remote-containers"
+  ],
+  // Ruff replaces these; having both fights over formatting.
+  "unwantedRecommendations": [
+    "ms-python.black-formatter",
+    "ms-python.isort",
+    "ms-python.flake8"
+  ]
+}

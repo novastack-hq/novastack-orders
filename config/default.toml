@@ -1,0 +1,18 @@
+# Default settings. Overlays (e.g. config/test.toml) only list what they change.
+# Select an overlay with NOVASTACK_ENV=<name> or `novastack --env <name>`.
+
+[pricing]
+vat_rate = 20            # per cent; menu prices include VAT
+meal_deal_price = "6.50" # main + side + drink
+student_rate = 10        # per cent, Monday to Friday
+
+[store]
+opening = "08:00"
+closing = "22:00"        # exclusive: an order at 22:00 exactly is refused
+
+[data]
+menu = "data/menu.json"
+customers = "data/customers.json"
+
+[logging]
+level = "WARNING"

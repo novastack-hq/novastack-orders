@@ -1,0 +1,9 @@
+{
+  "customer_id": "C002",
+  "items": [
+    {"sku": "M01", "quantity": 1},
+    {"sku": "S01", "quantity": 1},
+    {"sku": "D01", "quantity": 1},
+    {"sku": "D02", "quantity": 1}
+  ]
+}

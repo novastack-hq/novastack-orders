@@ -1,0 +1,7 @@
+[
+  {"customer_id": "C001", "name": "Alex Morgan", "email": "alex@example.com"},
+  {"customer_id": "C002", "name": "Sam Patel", "email": "sam@example.com", "tier": "silver", "points": 820},
+  {"customer_id": "C003", "name": "Morgan Lee", "email": "morgan@example.com", "tier": "gold", "points": 2450},
+  {"customer_id": "C004", "name": "Riley Chen", "email": "riley@example.ac.uk", "is_student": true},
+  {"customer_id": "C005", "name": "Taylor Brooks", "email": "taylor@example.ac.uk", "tier": "bronze", "is_student": true, "points": 120}
+]
