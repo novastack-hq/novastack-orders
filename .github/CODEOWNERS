@@ -1,0 +1,9 @@
+# Who reviews what. GitHub requests these reviewers automatically on PRs.
+# Later lines win, so the most specific paths go last.
+
+*                                   @novastack-hq/platform
+/src/novastack_orders/pricing/      @novastack-hq/pricing
+/src/novastack_orders/loyalty/      @novastack-hq/loyalty
+/tests/                             @novastack-hq/qa
+/pyproject.toml                     @novastack-hq/platform
+/uv.lock                            @novastack-hq/platform
