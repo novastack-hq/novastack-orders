@@ -6,6 +6,15 @@ All notable changes are listed here. Format:
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-06-22
+
+### Added
+- Student discount, 10% Monday to Friday (ORD-245).
+- Loyalty points and automatic tier upgrades (ORD-238).
+
+### Fixed
+- Halfpennies are now rounded up, matching the tills (ORD-251).
+
 ## [1.0.0] - 2026-05-11
 
 ### Added
