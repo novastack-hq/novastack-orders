@@ -1,0 +1,12 @@
+{
+  "customer_id": "C003",
+  "items": [
+    {"sku": "M03", "quantity": 4},
+    {"sku": "M04", "quantity": 2},
+    {"sku": "S01", "quantity": 4},
+    {"sku": "S02", "quantity": 2},
+    {"sku": "D01", "quantity": 3},
+    {"sku": "D04", "quantity": 3},
+    {"sku": "P01", "quantity": 6}
+  ]
+}
