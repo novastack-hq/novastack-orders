@@ -35,5 +35,8 @@
   },
 
   // ---- Git
-  "git.autofetch": true
+  "git.autofetch": true,
+
+  // ---- AI: give Copilot the team's rules in AGENTS.md
+  "chat.useAgentsMdFile": true
 }
