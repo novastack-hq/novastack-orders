@@ -6,6 +6,13 @@ All notable changes are listed here. Format:
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-08-03
+
+### Added
+- Line-level refunds for collected orders, with discounts shared fairly across
+  lines so refunds always add up to what was paid (ORD-284).
+- Confirmation, ready and cancellation emails (ORD-271).
+
 ## [1.1.0] - 2026-06-22
 
 ### Added

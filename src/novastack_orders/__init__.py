@@ -3,4 +3,4 @@
 Start with ``docs/architecture.md`` for how the packages fit together.
 """
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
