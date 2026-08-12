@@ -48,3 +48,10 @@ def test_points(capsys):
 def test_customers(capsys):
     assert main(["customers"]) == 0
     assert "Riley Chen" in capsys.readouterr().out
+
+
+def test_report(capsys):
+    orders = PROJECT_ROOT / "tests" / "fixtures" / "orders_small.jsonl"
+    assert main(["report", str(orders)]) == 0
+    out = capsys.readouterr().out
+    assert "Month-end sales report: orders_small" in out

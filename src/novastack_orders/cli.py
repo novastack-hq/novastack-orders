@@ -37,6 +37,7 @@ from novastack_orders.pricing.discounts.student import StudentDiscount
 from novastack_orders.services.checkout_service import CheckoutService
 from novastack_orders.services.notification_service import NotificationService
 from novastack_orders.services.receipts import render_receipt
+from novastack_orders.services.reporting import build_report, load_orders
 from novastack_orders.utils.dates import parse_timestamp
 from novastack_orders.utils.formatting import format_price, format_table
 
@@ -138,6 +139,39 @@ def cmd_customers(args: argparse.Namespace, settings: Settings) -> int:
     return 0
 
 
+def cmd_report(args: argparse.Namespace, settings: Settings) -> int:
+    path = Path(args.orders)
+    report = build_report(path.stem, load_orders(path), settings.menu_path)
+    print(f"Month-end sales report: {report.month}")
+    print(
+        format_table(
+            [
+                ["Orders", str(report.order_count)],
+                ["Revenue", format_price(report.revenue)],
+                ["Average order", format_price(report.average_order)],
+            ]
+        )
+    )
+    print("\nDiscounts given")
+    print(
+        format_table(
+            [[c, format_price(a)] for c, a in sorted(report.discounts_by_code.items())]
+        )
+    )
+    print("\nRevenue by category")
+    print(
+        format_table(
+            [
+                [c.value, format_price(a)]
+                for c, a in sorted(report.revenue_by_category.items())
+            ]
+        )
+    )
+    print("\nBest sellers")
+    print(format_table([[sku, str(n)] for sku, n in report.items_sold.most_common(5)]))
+    return 0
+
+
 def cmd_points(args: argparse.Namespace, settings: Settings) -> int:
     print(points_earned(Money.of(args.amount), LoyaltyTier(args.tier)))
     return 0
@@ -169,6 +203,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("customers", help="list customers")
     p.set_defaults(func=cmd_customers)
+
+    p = sub.add_parser("report", help="month-end sales report from order records")
+    p.add_argument(
+        "orders", help="order records (JSON Lines), e.g. data/orders/2026-09.jsonl"
+    )
+    p.set_defaults(func=cmd_report)
 
     p = sub.add_parser("points", help="points earned for an amount and tier")
     p.add_argument("amount")
