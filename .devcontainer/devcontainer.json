@@ -1,0 +1,40 @@
+{
+  // Dev Container: the same toolchain for everyone, in Docker.
+  // Optional: the normal route is your own laptop with uv. See docs/onboarding.md.
+  "name": "NovaStack Orders",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "remoteUser": "vscode",
+
+  // A .venv built on macOS or Windows can't run in Linux, so the container gets
+  // its own .venv on a Docker volume, at the same path.
+  "mounts": [
+    {
+      "source": "novastack-venv-${devcontainerId}",
+      "target": "${containerWorkspaceFolder}/.venv",
+      "type": "volume"
+    }
+  ],
+  "containerEnv": {
+    "UV_LINK_MODE": "copy",
+    "NOVASTACK_IN_CONTAINER": "1"
+  },
+
+  // New volumes belong to root: hand .venv to the vscode user. Tell Git the
+  // shared folder is safe (its owner differs inside the container). Install uv,
+  // then exactly what uv.lock says.
+  "postCreateCommand": "sudo chown vscode:vscode .venv && git config --global --add safe.directory ${containerWorkspaceFolder} && curl -LsSf https://astral.sh/uv/install.sh | sh && ~/.local/bin/uv sync --frozen",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "charliermarsh.ruff",
+        "EditorConfig.EditorConfig",
+        "eamodio.gitlens",
+        "GitHub.copilot-chat"
+      ]
+    }
+  }
+}
