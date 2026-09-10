@@ -18,6 +18,7 @@ from decimal import Decimal
 
 from novastack_orders.domain.basket import Basket, calc
 from novastack_orders.domain.customer import Customer
+from novastack_orders.domain.menu import Category
 from novastack_orders.domain.money import Money, total
 from novastack_orders.domain.order import AppliedDiscount
 from novastack_orders.errors import ValidationError
@@ -37,6 +38,7 @@ class PriceBreakdown:
     discounts: tuple[AppliedDiscount, ...]
     total: Money
     vat: Money
+    category_subtotals: dict[Category, Money]
 
     @property
     def discount_total(self) -> Money:
@@ -77,14 +79,20 @@ class PriceCalculator:
 
         ctx = PricingContext(basket=basket, customer=customer, at=at)
         applied: list[AppliedDiscount] = []
-        running = total([calc(line) for line in basket])
+        running = Money.zero()
+        category_subtotals: dict[Category, Money] = {}
+
+        # Category subtotals and the loyalty discount in a single pass (ORD-301).
+        for category, lines in basket.by_category().items():
+            category_total = total([calc(line) for line in lines])
+            category_subtotals[category] = category_total
+            running = running + category_total
+            if self._loyalty.applies(ctx):
+                running = self._apply(self._loyalty, ctx, running, applied)
 
         for rule in self._promotions:
             if rule.applies(ctx):
                 running = self._apply(rule, ctx, running, applied)
-
-        if self._loyalty.applies(ctx):
-            running = self._apply(self._loyalty, ctx, running, applied)
 
         if self._student.applies(ctx):
             running = self._apply(self._student, ctx, running, applied)
@@ -95,6 +103,7 @@ class PriceCalculator:
             discounts=tuple(applied),
             total=final,
             vat=vat_included(final, self._vat_rate),
+            category_subtotals=category_subtotals,
         )
 
     def _apply(
