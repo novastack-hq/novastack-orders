@@ -6,6 +6,16 @@ All notable changes are listed here. Format:
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-09-14
+
+### Changed
+- Category subtotals and the loyalty discount are calculated in a single pass
+  over the basket, and the breakdown now reports subtotals per category (ORD-301).
+
+### Added
+- Month-end sales report for Finance: `novastack report` (ORD-344).
+- Integration tests for a full checkout against SQLite (ORD-296).
+
 ## [1.2.0] - 2026-08-03
 
 ### Added
