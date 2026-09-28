@@ -43,6 +43,21 @@ def test_loyalty_discount_on_a_single_category(calculator):
     assert result.total == gbp("2.72")  # 3.20 less 15%
 
 
+@pytest.mark.smoke
+@pytest.mark.xfail(reason="ORD-317: remove when fixed", strict=True)
+def test_loyalty_discount_applied_once(calculator):
+    """ORD-317: a Silver customer orders a meal deal plus an extra drink.
+
+    Subtotal £10.70; meal deal saves £2.60 -> £8.10; Silver loyalty is 10% of
+    that, once -> £7.29.
+    """
+    customer = make_customer(tier=LoyaltyTier.SILVER)
+    basket = make_basket(("M01", 1), ("S01", 1), ("D01", 1), ("D02", 1))
+    result = calculator.calculate(basket, customer, WEDNESDAY_LUNCH)
+    assert result.discount_codes().count("LOYALTY") == 1
+    assert result.total == gbp("7.29")
+
+
 def test_student_discount_midweek(calculator):
     customer = make_customer(is_student=True)
     result = calculator.calculate(
