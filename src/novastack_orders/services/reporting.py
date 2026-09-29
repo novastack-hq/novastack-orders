@@ -44,6 +44,8 @@ class MonthlyReport:
     discounts_by_code: dict[str, Money] = field(default_factory=dict)
     revenue_by_category: dict[Category, Money] = field(default_factory=dict)
     items_sold: Counter[str] = field(default_factory=Counter)
+    new_customers: int = 0
+    returning_customers: int = 0
 
     @property
     def average_order(self) -> Money:
@@ -84,6 +86,14 @@ def category_of(sku: str, menu_path: Path) -> Category:
     return menu.get(sku).category
 
 
+def is_returning_customer(order: OrderRecord, orders: list[OrderRecord]) -> bool:
+    """True if the customer had already ordered earlier in the month (ORD-355)."""
+    return any(
+        other.customer_id == order.customer_id and other.placed_at < order.placed_at
+        for other in orders
+    )
+
+
 def build_report(
     month: str, orders: list[OrderRecord], menu_path: Path
 ) -> MonthlyReport:
@@ -102,4 +112,8 @@ def build_report(
                 report.revenue_by_category.get(category, Money.zero()) + line.line_total
             )
             report.items_sold[line.sku] += line.quantity
+        if is_returning_customer(order, orders):
+            report.returning_customers += 1
+        else:
+            report.new_customers += 1
     return report

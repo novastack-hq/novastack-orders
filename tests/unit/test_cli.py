@@ -55,3 +55,4 @@ def test_report(capsys):
     assert main(["report", str(orders)]) == 0
     out = capsys.readouterr().out
     assert "Month-end sales report: orders_small" in out
+    assert "Repeat orders" in out

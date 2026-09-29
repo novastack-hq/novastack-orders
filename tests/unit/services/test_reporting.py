@@ -47,6 +47,12 @@ def test_best_sellers_count_quantities(report):
     assert report.items_sold.most_common(1) == [("N01", 3)]
 
 
+def test_customers_and_repeat_orders(report):
+    # C1001, C1002 and C1003 are customers; C1001 and C1002 each came back once.
+    assert report.new_customers == 3
+    assert report.returning_customers == 2
+
+
 def test_empty_month():
     empty = build_report("2026-10", [], load_settings(env="test").menu_path)
     assert empty.order_count == 0

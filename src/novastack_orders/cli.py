@@ -149,6 +149,8 @@ def cmd_report(args: argparse.Namespace, settings: Settings) -> int:
                 ["Orders", str(report.order_count)],
                 ["Revenue", format_price(report.revenue)],
                 ["Average order", format_price(report.average_order)],
+                ["Customers", str(report.new_customers)],
+                ["Repeat orders", str(report.returning_customers)],
             ]
         )
     )

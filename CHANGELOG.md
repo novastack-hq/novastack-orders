@@ -6,6 +6,9 @@ All notable changes are listed here. Format:
 
 ## [Unreleased]
 
+### Added
+- The month-end report shows new customers and repeat orders (ORD-355).
+
 ## [1.3.0] - 2026-09-14
 
 ### Changed
