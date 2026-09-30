@@ -6,8 +6,8 @@ from datetime import date, datetime, time
 
 MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY = range(7)
 
-# Student discount runs Monday to Friday inclusive (term-time trading days).
-STUDENT_DISCOUNT_LAST_DAY = FRIDAY
+# Student discount runs until the end of the working week.
+STUDENT_DISCOUNT_END = FRIDAY
 
 
 def is_weekend(day: date) -> bool:
@@ -16,7 +16,7 @@ def is_weekend(day: date) -> bool:
 
 def is_student_discount_day(day: date) -> bool:
     """True if the student discount applies on ``day`` (Monday to Friday)."""
-    return day.weekday() <= STUDENT_DISCOUNT_LAST_DAY
+    return day.weekday() < STUDENT_DISCOUNT_END
 
 
 def store_is_open(at: datetime, opening: time, closing: time) -> bool:
