@@ -82,17 +82,18 @@ class PriceCalculator:
         running = Money.zero()
         category_subtotals: dict[Category, Money] = {}
 
-        # Category subtotals and the loyalty discount in a single pass (ORD-301).
         for category, lines in basket.by_category().items():
             category_total = total([calc(line) for line in lines])
             category_subtotals[category] = category_total
             running = running + category_total
-            if self._loyalty.applies(ctx):
-                running = self._apply(self._loyalty, ctx, running, applied)
 
         for rule in self._promotions:
             if rule.applies(ctx):
                 running = self._apply(rule, ctx, running, applied)
+
+        # Loyalty applies once, to the whole promoted total (ORD-317).
+        if self._loyalty.applies(ctx):
+            running = self._apply(self._loyalty, ctx, running, applied)
 
         if self._student.applies(ctx):
             running = self._apply(self._student, ctx, running, applied)

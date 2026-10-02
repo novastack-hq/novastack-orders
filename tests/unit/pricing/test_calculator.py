@@ -44,7 +44,6 @@ def test_loyalty_discount_on_a_single_category(calculator):
 
 
 @pytest.mark.smoke
-@pytest.mark.xfail(reason="ORD-317: remove when fixed", strict=True)
 def test_loyalty_discount_applied_once(calculator):
     """ORD-317: a Silver customer orders a meal deal plus an extra drink.
 
