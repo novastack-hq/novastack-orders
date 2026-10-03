@@ -55,7 +55,7 @@ class PriceCalculator:
         self,
         promotions: list[DiscountRule],
         loyalty: LoyaltyDiscount,
-        student: StudentDiscount,
+        student: StudentDiscount | None = None,
         vat_rate: Decimal = STANDARD_RATE,
     ) -> None:
         self._promotions = promotions

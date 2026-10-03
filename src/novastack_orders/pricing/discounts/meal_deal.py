@@ -9,7 +9,7 @@ from novastack_orders.pricing.discounts.base import DiscountRule, PricingContext
 DEFAULT_DEAL_PRICE = Money.of("6.50")
 
 
-def _unit_prices(ctx: PricingContext, category: Category) -> list[Money]:
+def _unit_prices(ctx, category):
     """One entry per unit in ``category``, most expensive first."""
     prices: list[Money] = []
     for line in ctx.basket:
