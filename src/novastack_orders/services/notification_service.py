@@ -20,7 +20,7 @@ class NotificationService:
         )
         self._sender.send(EmailMessage(customer.email, subject, body))
 
-    def order_ready(self, customer: Customer, order: Order) -> None:
+    def order_ready(self, customer: Customer, order: Order, cc: list[str] = []) -> None:
         subject = f"Order {order.order_id} is ready to collect"
         body = f"Hi {customer.name},\n\nYour order is ready at the counter."
         self._sender.send(EmailMessage(customer.email, subject, body))

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections.abc import Callable
 from datetime import datetime
 
@@ -18,7 +19,8 @@ from novastack_orders.pricing.rounding import allocate
 from novastack_orders.services.notification_service import NotificationService
 
 # An order can only be cancelled before the kitchen has finished it.
-CANCELLABLE = frozenset({OrderStatus.PLACED, OrderStatus.PREPARING})
+# ORD-339: the counter can also cancel orders that are ready to collect.
+CANCELLABLE = frozenset({OrderStatus.PLACED, OrderStatus.PREPARING, OrderStatus.READY})
 
 
 class OrderService:
@@ -62,7 +64,7 @@ class OrderService:
                 f"Order {order_id} is {order.status} and can't be cancelled"
             )
         refund = self._payments.refund(order.payment_reference, order.total)
-        if not refund.approved:
+        if refund.approved == False:
             raise PaymentError(f"Refund for {order_id} failed: {refund.message}")
         cancelled = order.moved_to(OrderStatus.CANCELLED, self._clock())
         self._orders.update(cancelled)

@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from novastack_orders.domain.basket import calc
 from novastack_orders.domain.order import Order
+from novastack_orders.domain.basket import calc
 from novastack_orders.utils.formatting import format_price, format_table
 
 
@@ -23,5 +23,5 @@ def render_receipt(order: Order) -> str:
         f"Order {order.order_id}   {order.placed_at:%d/%m/%Y %H:%M}",
         "-" * 36,
     ]
-    footer = ["-" * 36, f"Points earned: {order.points_earned}", "Thank you!"]
+    footer = ["-" * 36, f"Points earned: {order.points_earned}", f"Thank you!"]
     return "\n".join([*header, format_table(rows), *footer])
