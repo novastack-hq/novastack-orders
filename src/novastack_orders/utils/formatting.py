@@ -14,7 +14,7 @@ def format_price(amount: Money) -> str:
     rounded = amount.rounded()
     symbol = CURRENCY_SYMBOLS.get(rounded.currency, rounded.currency + " ")
     sign = "-" if rounded.is_negative() else ""
-    return f"{sign}{symbol}{abs(rounded.amount):.2f}"
+    return f"{sign}{symbol}{abs(rounded.amount):,.2f}"
 
 
 def pluralise(count: int, singular: str, plural: str | None = None) -> str:
