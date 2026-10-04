@@ -14,7 +14,6 @@ from novastack_orders.domain.basket import calc
 from novastack_orders.domain.money import Money
 from novastack_orders.domain.order import Order, OrderStatus
 from novastack_orders.errors import NotFoundError, OrderStateError, PaymentError
-from novastack_orders.pricing.rounding import allocate
 from novastack_orders.services.notification_service import NotificationService
 
 # An order can only be cancelled before the kitchen has finished it.
@@ -76,14 +75,13 @@ class OrderService:
         The shares always add up to the order total, so refunding every line
         refunds exactly what was paid.
         """
-        line_prices = [calc(line) for line in order.lines]
-        discount_shares = allocate(order.total_discount, line_prices)
-        return {
-            line.item.sku: (price - share).rounded()
-            for line, price, share in zip(
-                order.lines, line_prices, discount_shares, strict=True
-            )
-        }
+        discount = order.subtotal - order.total
+        refunds: dict[str, Money] = {}
+        for line in order.lines:
+            price = calc(line)
+            share = (discount * (price.amount / order.subtotal.amount)).rounded()
+            refunds[line.item.sku] = price - share
+        return refunds
 
     def refund_line(self, order_id: str, sku: str) -> Money:
         """Refund one line of a collected order (e.g. a missing item)."""
