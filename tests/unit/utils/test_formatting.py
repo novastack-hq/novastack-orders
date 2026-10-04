@@ -31,3 +31,7 @@ def test_format_table_aligns_columns():
 
 def test_format_table_empty():
     assert format_table([]) == ""
+
+
+def test_format_price_with_currency_code():
+    assert format_price(Money.of("9.9"), show_code=True) == "GBP 9.90"

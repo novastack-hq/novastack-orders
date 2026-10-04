@@ -9,11 +9,17 @@ from novastack_orders.domain.money import Money
 CURRENCY_SYMBOLS = {"GBP": "£", "EUR": "€", "USD": "$"}
 
 
-def format_price(amount: Money) -> str:
-    """Format money for customers, e.g. ``£9.90`` or ``-£1.25``."""
+def format_price(amount: Money, show_code: bool = False) -> str:
+    """Format money for customers, e.g. ``£9.90``, ``-£1.25`` or ``GBP 9.90``.
+
+    ``show_code`` prints the ISO currency code instead of the symbol, for
+    exports read by finance systems (ORD-329).
+    """
     rounded = amount.rounded()
     symbol = CURRENCY_SYMBOLS.get(rounded.currency, rounded.currency + " ")
     sign = "-" if rounded.is_negative() else ""
+    if show_code:
+        return f"{sign}{rounded.currency} {abs(rounded.amount):.2f}"
     return f"{sign}{symbol}{abs(rounded.amount):.2f}"
 
 
