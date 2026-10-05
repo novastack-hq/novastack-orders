@@ -78,3 +78,22 @@ def test_refund_line_unknown_sku(order_service, placed):
 def test_history_lists_a_customers_orders(order_service, checkout, placed):
     checkout.checkout("C100", make_basket(("N01", 1)), "tok_visa")
     assert len(order_service.history("C100")) == 2
+
+
+def test_line_refunds_add_up_for_a_team_order(checkout, order_service):
+    """ORD-333: a Gold customer's office lunch, ten lines."""
+    basket = make_basket(
+        ("M01", 2),
+        ("M02", 1),
+        ("M03", 1),
+        ("S01", 2),
+        ("S02", 1),
+        ("D01", 3),
+        ("D02", 1),
+        ("D03", 2),
+        ("P01", 1),
+        ("N01", 4),
+    )
+    order = checkout.checkout("C300", basket, "tok_visa")
+    refunds = order_service.line_refunds(order)
+    assert sum(r.pence for r in refunds.values()) == order.total.pence
