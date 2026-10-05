@@ -78,3 +78,12 @@ def test_refund_line_unknown_sku(order_service, placed):
 def test_history_lists_a_customers_orders(order_service, checkout, placed):
     checkout.checkout("C100", make_basket(("N01", 1)), "tok_visa")
     assert len(order_service.history("C100")) == 2
+
+
+def test_ready_orders_cannot_be_cancelled_or_refunded(order_service, placed, payments):
+    """ORD-341: the kitchen has finished it, so it can't be cancelled or refunded."""
+    order_service.advance(placed.order_id, OrderStatus.PREPARING)
+    order_service.advance(placed.order_id, OrderStatus.READY)
+    with pytest.raises(OrderStateError, match="can't be cancelled"):
+        order_service.cancel(placed.order_id)
+    assert payments.refunds == {}
