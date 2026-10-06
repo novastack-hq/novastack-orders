@@ -7,6 +7,8 @@ All notable changes are listed here. Format:
 ## [Unreleased]
 
 ### Fixed
+- The month-end report is fast again: each customer's first order is
+  found in one pass, and the menu is read once (ORD-361).
 - The loyalty discount is applied once per basket, not once per category (ORD-317).
 
 ### Added

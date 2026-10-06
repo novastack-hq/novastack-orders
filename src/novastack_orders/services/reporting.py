@@ -80,18 +80,19 @@ def load_orders(path: Path) -> list[OrderRecord]:
     return orders
 
 
-def category_of(sku: str, menu_path: Path) -> Category:
-    """The menu category a SKU belongs to."""
+def load_categories(menu_path: Path) -> dict[str, Category]:
+    """Every SKU's menu category, read from the menu file once."""
     menu = Menu.from_records(json.loads(menu_path.read_text(encoding="utf-8")))
-    return menu.get(sku).category
+    return {item.sku: item.category for item in menu}
 
 
-def is_returning_customer(order: OrderRecord, orders: list[OrderRecord]) -> bool:
-    """True if the customer had already ordered earlier in the month (ORD-355)."""
-    return any(
-        other.customer_id == order.customer_id and other.placed_at < order.placed_at
-        for other in orders
-    )
+def first_order_times(orders: list[OrderRecord]) -> dict[str, datetime]:
+    """When each customer first ordered this month, in one pass (ORD-355)."""
+    first: dict[str, datetime] = {}
+    for order in orders:
+        if order.customer_id not in first or order.placed_at < first[order.customer_id]:
+            first[order.customer_id] = order.placed_at
+    return first
 
 
 def build_report(
@@ -99,6 +100,8 @@ def build_report(
 ) -> MonthlyReport:
     """Summarise a month of orders."""
     report = MonthlyReport(month=month)
+    first_order = first_order_times(orders)
+    categories = load_categories(menu_path)
     for order in orders:
         report.order_count += 1
         report.revenue = report.revenue + order.total
@@ -107,12 +110,12 @@ def build_report(
                 report.discounts_by_code.get(code, Money.zero()) + amount
             )
         for line in order.lines:
-            category = category_of(line.sku, menu_path)
+            category = categories[line.sku]
             report.revenue_by_category[category] = (
                 report.revenue_by_category.get(category, Money.zero()) + line.line_total
             )
             report.items_sold[line.sku] += line.quantity
-        if is_returning_customer(order, orders):
+        if order.placed_at > first_order[order.customer_id]:
             report.returning_customers += 1
         else:
             report.new_customers += 1
