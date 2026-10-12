@@ -87,11 +87,14 @@ def load_categories(menu_path: Path) -> dict[str, Category]:
 
 
 def first_order_times(orders: list[OrderRecord]) -> dict[str, datetime]:
-    """When each customer first ordered this month, in one pass (ORD-355)."""
+    """When each customer first ordered this month (ORD-355).
+
+    The till exports orders in time order, so a customer's first order is
+    simply the first one we see (ORD-363).
+    """
     first: dict[str, datetime] = {}
     for order in orders:
-        if order.customer_id not in first or order.placed_at < first[order.customer_id]:
-            first[order.customer_id] = order.placed_at
+        first.setdefault(order.customer_id, order.placed_at)
     return first
 
 
