@@ -53,6 +53,14 @@ def test_customers_and_repeat_orders(report):
     assert report.returning_customers == 2
 
 
+def test_top_customers_by_spend(report):
+    assert report.top_customers == [
+        ("C1001", gbp("8.90")),
+        ("C1002", gbp("7.92")),
+        ("C1003", gbp("3.64")),
+    ]
+
+
 def test_empty_month():
     empty = build_report("2026-10", [], load_settings(env="test").menu_path)
     assert empty.order_count == 0

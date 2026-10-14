@@ -171,6 +171,8 @@ def cmd_report(args: argparse.Namespace, settings: Settings) -> int:
     )
     print("\nBest sellers")
     print(format_table([[sku, str(n)] for sku, n in report.items_sold.most_common(5)]))
+    print("\nTop customers")
+    print(format_table([[c, format_price(s)] for c, s in report.top_customers]))
     return 0
 
 

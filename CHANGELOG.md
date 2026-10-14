@@ -12,6 +12,7 @@ All notable changes are listed here. Format:
 - The loyalty discount is applied once per basket, not once per category (ORD-317).
 
 ### Added
+- The month-end report lists the five top customers by spend (ORD-362).
 - The month-end report shows new customers and repeat orders (ORD-355).
 
 ## [1.3.0] - 2026-09-14

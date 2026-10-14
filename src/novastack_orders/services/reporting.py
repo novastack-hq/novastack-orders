@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 
 from novastack_orders.domain.menu import Category, Menu
-from novastack_orders.domain.money import Money
+from novastack_orders.domain.money import Money, total
 from novastack_orders.utils.dates import parse_timestamp
 
 
@@ -46,6 +46,7 @@ class MonthlyReport:
     items_sold: Counter[str] = field(default_factory=Counter)
     new_customers: int = 0
     returning_customers: int = 0
+    top_customers: list[tuple[str, Money]] = field(default_factory=list)
 
     @property
     def average_order(self) -> Money:
@@ -98,6 +99,18 @@ def first_order_times(orders: list[OrderRecord]) -> dict[str, datetime]:
     return first
 
 
+def customer_spend(customer_id: str, orders: list[OrderRecord]) -> Money:
+    """Everything one customer spent in these orders."""
+    return total([o.total for o in orders if o.customer_id == customer_id])
+
+
+def top_customers(orders: list[OrderRecord], n: int = 5) -> list[tuple[str, Money]]:
+    """The ``n`` customers who spent the most, biggest first (ORD-362)."""
+    spend = {o.customer_id: customer_spend(o.customer_id, orders) for o in orders}
+    ranked = sorted(spend.items(), key=lambda pair: (-pair[1].amount, pair[0]))
+    return ranked[:n]  # ties: by customer ID
+
+
 def build_report(
     month: str, orders: list[OrderRecord], menu_path: Path
 ) -> MonthlyReport:
@@ -122,4 +135,5 @@ def build_report(
             report.returning_customers += 1
         else:
             report.new_customers += 1
+    report.top_customers = top_customers(orders)
     return report
