@@ -6,7 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [{ name = "NovaStack Orders Team" }]
-dependencies = []
+dependencies = [
+    "tzdata>=2024.1",
+]
 
 [project.scripts]
 novastack = "novastack_orders.cli:main"
